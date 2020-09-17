@@ -7,3 +7,6 @@ Cancel the text copy guard of PDF.
 ```
 > pdf_text_copy_guard_canceller.exe <DIR>
 ```
+
+## License
+MIT
