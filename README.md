@@ -10,3 +10,6 @@ Cancel the text copy guard of PDF.
 
 ## License
 MIT
+
+## Author  
+Kenta Goto
