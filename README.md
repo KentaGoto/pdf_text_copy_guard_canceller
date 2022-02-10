@@ -3,7 +3,7 @@
 ## DESCRIPTION 
 Cancel the text copy guard of PDF. 
 
-### Note
+### NOTE
 After execution, the pdf file will be overwritten.
 
 ## USAGE 
@@ -13,7 +13,7 @@ After execution, the pdf file will be overwritten.
 
 ## REQUIRES
 - Windows
-- Place **qpdf.exe** in the same directory.(https://qpdf.sourceforge.io/)
+- Place **qpdf.exe** in the same directory. (https://qpdf.sourceforge.io/)
 
 ## License
 MIT
