@@ -97,7 +97,6 @@ func main() {
   $> pdf2images_concurrency.exe <DIR>
 DESCRIPTION
   Remove the PDF text copy guard.
-  A PDF with the prefix "copy_" is created in the same location as the original PDF.
   It is recursively processed with the directory specified as the first argument as the root.
 OPTION
   -h or --help
