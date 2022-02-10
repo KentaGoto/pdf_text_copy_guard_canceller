@@ -42,6 +42,16 @@ func runCommand(paths []string) string {
 				fmt.Printf("    Pid: %d\n", state.Pid())           // プロセスID
 				fmt.Printf("    System: %v\n", state.SystemTime()) // システム時間（カーネル内で行われた処理の時間）
 				fmt.Printf("    User: %v\n", state.UserTime())     // ユーザー時間（プロセス内で消費された時間）
+
+				// 元のファイル削除
+				if err := os.Remove(path); err != nil {
+					fmt.Println(err)
+				}
+
+				// リネーム
+				if err := os.Rename(pdfDir+"/"+"copy_"+filename+".pdf", path); err != nil {
+					fmt.Println(err)
+				}
 			}
 		}(path)
 	}
@@ -85,22 +95,17 @@ func main() {
 		if help == "-h" || help == "--help" {
 			fmt.Println(`USAGE
   $> pdf2images_concurrency.exe <DIR>
-
 DESCRIPTION
   Remove the PDF text copy guard.
   A PDF with the prefix "copy_" is created in the same location as the original PDF.
   It is recursively processed with the directory specified as the first argument as the root.
-
 OPTION
   -h or --help
-
 REQUIREMENTS
   Windows
-
 INSTALLATION
   Copy the pdf_text_copy_guard_canceller folder to any local location.
   *Do not move pdf_text_copy_guard_canceller.exe and qpdf.exe in the pdf_text_copy_guard_canceller folder.
-
 AUTHOR
   Kenta Goto`)
 			os.Exit(1)
