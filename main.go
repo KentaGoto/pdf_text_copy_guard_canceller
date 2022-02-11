@@ -16,48 +16,52 @@ import (
 func runCommand(paths []string) string {
 	wg := &sync.WaitGroup{}
 
-	flag := 0 // PDFファイルが有るかどうかのフラグ
+	flag := 0
 
 	for _, path := range paths {
 		wg.Add(1)
+
 		go func(path string) {
-			//log.Println(runtime.NumGoroutine()) // goroutineの数
+			//log.Println(runtime.NumGoroutine()) // Number of goroutine
 			defer wg.Done()
-			ext := strings.LastIndex(path, ".") // 拡張子（.pdf）
-			// PDFが存在したら以下の処理をする
+			ext := strings.LastIndex(path, ".") // extension (.pdf)
+
 			if path[ext:] == ".pdf" {
 				flag = 1
-				pdfDir := filepath.Dir(path)            // PDFファイルのディレクトリパス
-				filename := getFileNameWithoutExt(path) // ファイル名
-				// qpdfを叩いてPDFのテキストコピーガードを解除
+				pdfDir := filepath.Dir(path)            // Directory of pdf file
+				filename := getFileNameWithoutExt(path)
+
+				// Run qpdf command
 				cmd := exec.Command("qpdf", "--qdf", path, pdfDir+"/"+"copy_"+filename+".pdf")
 				err := cmd.Run()
 				if err != nil {
 					panic(err)
 				}
-				fmt.Println("\n", path) // 処理後のファイルをフルパスで出力
-				// 実行コマンドのステータスを表示
-				state := cmd.ProcessState
-				fmt.Printf("  %s\n", state.String())               // 終了コードと状態
-				fmt.Printf("    Pid: %d\n", state.Pid())           // プロセスID
-				fmt.Printf("    System: %v\n", state.SystemTime()) // システム時間（カーネル内で行われた処理の時間）
-				fmt.Printf("    User: %v\n", state.UserTime())     // ユーザー時間（プロセス内で消費された時間）
 
-				// 元のファイル削除
+				fmt.Println("\n", path)
+
+				// Output command status
+				state := cmd.ProcessState
+				fmt.Printf("  %s\n", state.String())               // Exit code and state
+				fmt.Printf("    Pid: %d\n", state.Pid())           // Process ID
+				fmt.Printf("    System: %v\n", state.SystemTime()) // System time (the time of processing done in the kernel)
+				fmt.Printf("    User: %v\n", state.UserTime())     // User time (time consumed in the process)
+
+				// Delete the original file
 				if err := os.Remove(path); err != nil {
 					fmt.Println(err)
 				}
 
-				// リネーム
+				// Rename
 				if err := os.Rename(pdfDir+"/"+"copy_"+filename+".pdf", path); err != nil {
 					fmt.Println(err)
 				}
 			}
 		}(path)
 	}
-	wg.Wait() // goroutineが終わるまで待つ
+	wg.Wait()
 
-	// PDFが無ければ終了
+	// If there is no PDF, exit.
 	if flag == 0 {
 		fmt.Println("PDF file is missing.")
 		os.Exit(1)
@@ -89,7 +93,7 @@ func dirwalk(dir string) []string {
 }
 
 func main() {
-	// 第1引数が-hか--helpだったらUsageなどを出力して終了
+	// If the first argument is -h or --help, output Usage, etc. and exit.
 	if len(os.Args) == 2 {
 		help := os.Args[1]
 		if help == "-h" || help == "--help" {
@@ -110,16 +114,16 @@ AUTHOR
 		}
 	}
 
-	// 引数が1つ以外は終了
+	// Exit for all but one argument
 	if len(os.Args) != 2 {
 		fmt.Println("The number of arguments specified is incorrect. Only one argument is allowed.")
 		os.Exit(1)
 	}
 
-	dir := os.Args[1]     // 第1引数（処理対象ルートディレクトリ）
-	paths := dirwalk(dir) // ルートディレクトリを再帰で読みにいく
+	dir := os.Args[1]     // First argument (root directory to be processed)
+	paths := dirwalk(dir) // Go to read the root directory recursively
 
-	// ファイルが何もなければ終了
+	// If there are no files, exit.
 	if paths == nil {
 		fmt.Println("File is missing.")
 		os.Exit(1)
@@ -127,15 +131,15 @@ AUTHOR
 
 	fmt.Println("Processing...")
 
-	// プログレスバー
+	// Progressbar
 	s := spinner.New(spinner.CharSets[36], 100*time.Millisecond)
 	s.Color("green")
 	s.Start()
 
-	// コマンド起動
+	// Run command
 	result := runCommand(paths)
 
-	s.Stop() // プログレスバー終了
+	s.Stop() // End of progress bar
 
 	fmt.Println(result)
 }
