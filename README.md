@@ -13,10 +13,10 @@ After execution, the pdf file will be overwritten.
 
 ## REQUIRES
 - Windows
-- Place **qpdf.exe** in the same directory. (https://qpdf.sourceforge.io/)
+- The qpdf command must have an environment variable path. (https://qpdf.sourceforge.io/)
 
-## License
+## LICENSE
 MIT
 
-## Author  
+## AUTHOR  
 Kenta Goto
