@@ -30,7 +30,7 @@ func runCommand(paths []string) string {
 				pdfDir := filepath.Dir(path)            // PDFファイルのディレクトリパス
 				filename := getFileNameWithoutExt(path) // ファイル名
 				// qpdfを叩いてPDFのテキストコピーガードを解除
-				cmd := exec.Command("qpdf.exe", "--qdf", path, pdfDir+"/"+"copy_"+filename+".pdf")
+				cmd := exec.Command("qpdf", "--qdf", path, pdfDir+"/"+"copy_"+filename+".pdf")
 				err := cmd.Run()
 				if err != nil {
 					panic(err)
@@ -104,7 +104,6 @@ REQUIREMENTS
   Windows
 INSTALLATION
   Copy the pdf_text_copy_guard_canceller folder to any local location.
-  *Do not move pdf_text_copy_guard_canceller.exe and qpdf.exe in the pdf_text_copy_guard_canceller folder.
 AUTHOR
   Kenta Goto`)
 			os.Exit(1)
