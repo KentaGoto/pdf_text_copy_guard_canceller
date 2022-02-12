@@ -12,6 +12,9 @@ After execution, the pdf file will be overwritten.
 > pdf_text_copy_guard_canceller.exe <DIR>
 ```
 
+### OPTION
+**-h** or **--help**
+
 ## REQUIRES
 - Windows
 - The qpdf command must have an environment variable path. (https://qpdf.sourceforge.io/)
