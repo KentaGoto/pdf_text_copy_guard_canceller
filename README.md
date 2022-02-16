@@ -12,6 +12,10 @@ After execution, the pdf file will be overwritten.
 > pdf_text_copy_guard_canceller.exe <DIR>
 ```
 
+or
+
+Run the **Run.bat** file.
+
 ### OPTION
 **-h** or **--help**
 
